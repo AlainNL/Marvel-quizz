@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, Fragment } from "react";
+import { Link } from 'react-router-dom';
 
 const Landing = () => {
 
@@ -15,13 +16,30 @@ const Landing = () => {
 
   }, [])
 
+  const setLeftImg = () => {
+    refWolwerine.current.classList.add("leftImg");
+  }
+
+  const setRightImg = () => {
+    refWolwerine.current.classList.add("rightImg");
+  }
+
+  const clearImg = () => {
+
+      if(refWolwerine.current.classList.contains("leftImg"))  {
+        refWolwerine.current.classList.remove("leftImg")
+      } else if (refWolwerine.current.classList.contains("rightImg")) {
+        refWolwerine.current.classList.remove("rightImg")
+      }
+  }
+
   const displayBtn = btn && (
     <Fragment>
-      <div className="leftBox">
-          <button className="btn-welcome">Inscription</button>
+      <div onMouseOver={setLeftImg} onMouseOut={clearImg} className="leftBox">
+          <Link className="btn-welcome" to="/signup">Inscription</Link>
       </div>
-      <div className="rightBox">
-          <button className="btn-welcome">Connexion</button>
+      <div onMouseOver={setRightImg} onMouseOut={clearImg} className="rightBox">
+          <Link className="btn-welcome" to="/login">Connexion</Link>
       </div>
     </Fragment>
   )
