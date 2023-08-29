@@ -4,10 +4,10 @@ import Header from '../Header';
 import Landing from '../Landing';
 import Footer from '../Footer';
 import Welcome from '../Welcome';
-import '../../App.css';
 import Login from '../Login';
 import Signup from '../Signeup';
 import ErrorPage from '../ErrorPage';
+import '../../App.css';
 
 function App() {
   return (
