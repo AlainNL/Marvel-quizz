@@ -12,14 +12,11 @@ const Welcome = props => {
 
 
   useEffect(() => {
-      const listener = onAuthStateChanged(auth, user => {
-        console.log("hello")
-          user ? setUserSession(user) : navigate('/')
-      })
-
-
-      return listener();
-  }, [])
+    const listener = onAuthStateChanged(auth, user => {
+        user ? setUserSession(user) : navigate('/')
+    })
+    return listener();
+}, [navigate])
 
   return userSession === null ? (
       <Fragment>
