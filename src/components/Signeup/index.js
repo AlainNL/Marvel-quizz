@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../Firebase/firebaseConfig';
+import { auth, user } from '../Firebase/firebaseConfig';
+import { setDoc } from 'firebase/firestore';
 
 const Signup = (props) => {
 
@@ -24,8 +25,14 @@ const Signup = (props) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const { email, password } = loginData;
+    const { email, password, pseudo } = loginData;
     createUserWithEmailAndPassword(auth, email, password)
+    .then( authUser => {
+        return setDoc(user(authUser.user.uid), {
+            pseudo,
+            email
+        })
+    })
     .then(user => {
         setLoginData({...data});
         navigate('/welcome');
@@ -38,7 +45,7 @@ const Signup = (props) => {
 
   const {pseudo, email, password, confirmPassword} = loginData;
 
-  const btn = pseudo === '' || email === '' || password === '' || password !== confirmPassword
+  const btn = pseudo === '' || pseudo.indexOf('@') > 1 || email === '' || password === '' || password !== confirmPassword
   ? <button disabled>Inscription</button> : <button>Inscription</button>
 
   // gestion des erreurs
