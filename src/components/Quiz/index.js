@@ -9,23 +9,27 @@ import QuizOver from '../QuizzOver';
 
 class Quiz extends Component {
 
+    constructor(props) {
+      super(props)
 
-  state = {
-      levelNames: ["debutant", "confirme", "expert"],
-      quizzLevel: 0,
-      maxQuestions: 10,
-      storedQuestions: [],
-      question: null,
-      options: [],
-      idQuestion: 0,
-      btnDisabled: true,
-      userAnswer: null,
-      score: 0,
-      showWelcomeMsg: false,
-      quizEnd: false
+      this.initialState = {
+        levelNames: ["debutant", "confirme", "expert"],
+        quizLevel: 0,
+        maxQuestions: 10,
+        storedQuestions: [],
+        question: null,
+        options: [],
+        idQuestion: 0,
+        btnDisabled: true,
+        userAnswer: null,
+        score: 0,
+        showWelcomeMsg: false,
+        quizEnd: false
+    }
+
+      this.state = this.initialState;
+      this.storedDataRef = React.createRef();
   }
-
-  storedDataRef = React.createRef();
 
   loadQuestions = quizz => {
       const fetchedArrayQuiz = QuizMarvel[0].quizz[quizz];
@@ -44,7 +48,7 @@ class Quiz extends Component {
       }
   }
 
-  showWelcomeMsg = pseudo => {
+  showToastMsg = pseudo => {
       if(!this.state.showWelcomeMsg) {
 
           this.setState({
@@ -66,7 +70,7 @@ class Quiz extends Component {
   }
 
   componentDidMount() {
-      this.loadQuestions(this.state.levelNames[this.state.quizzLevel])
+      this.loadQuestions(this.state.levelNames[this.state.quizLevel])
 
   }
 
@@ -87,8 +91,8 @@ class Quiz extends Component {
           })
       }
 
-      if (this.props.userData.pseudo) {
-          this.showWelcomeMsg(this.props.userData.pseudo)
+      if (this.props.userData.pseudo !== prevProps.userData.pseudo) {
+          this.showToastMsg(this.props.userData.pseudo)
       }
 
   }
@@ -135,10 +139,32 @@ class Quiz extends Component {
       })
   }
 
+  getPercentage = (maxQuest, ourScore) => (ourScore / maxQuest) * 100;
+
+
+
   gameOver = () => {
-      this.setState({
-        quizEnd: true
-      })
+
+    const gradePercent = this.getPercentage(this.state.maxQuestions, this.state.score);
+
+    if (gradePercent >= 50) {
+        this.setState({
+            quizLevel: this.state.quizLevel +1,
+            percent:  gradePercent,
+            quizEnd: true
+        })
+    } else {
+        this.setState({
+            percent: gradePercent,
+            quizEnd: true
+        })
+    }
+
+  }
+
+  loadLevelQuestions = param => {
+      this.setState({...this.initialState, quizLevel: param})
+      this.loadQuestions(this.state.levelNames[param])
   }
 
   render() {
@@ -156,9 +182,15 @@ class Quiz extends Component {
         )
     })
 
-    return !this.state.quizEnd ? (
+    return this.state.quizEnd ? (
         <QuizOver
             ref={this.storedDataRef}
+            levelNames={this.state.levelNames}
+            score={this.state.score}
+            maxQuestions={this.state.maxQuestions}
+            quizLevel={this.state.quizLevel}
+            percent={this.state.percent}
+            loadLevelQuestions={this.loadLevelQuestions}
         />
     )
     :
