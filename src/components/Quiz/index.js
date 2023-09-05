@@ -75,20 +75,25 @@ class Quiz extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-      if (this.state.storedQuestions !== prevState.storedQuestions) {
+      if ((this.state.storedQuestions !== prevState.storedQuestions) && this.state.storedQuestions.length) {
           this.setState({
               question: this.state.storedQuestions[this.state.idQuestion].question,
               options: this.state.storedQuestions[this.state.idQuestion].options
           })
       }
 
-      if (this.state.idQuestion !== prevState.idQuestion) {
+      if ((this.state.idQuestion !== prevState.idQuestion) && this.state.storedQuestions.length) {
           this.setState({
             question: this.state.storedQuestions[this.state.idQuestion].question,
             options: this.state.storedQuestions[this.state.idQuestion].options,
             userAnswer: null,
             btnDisabled: true
           })
+      }
+
+      if (this.state.quizEnd !== prevState.quizEnd) {
+          const gradePercent = this.getPercentage(this.state.maxQuestions, this.state.score);
+          this.gameOver(gradePercent);
       }
 
       if (this.props.userData.pseudo !== prevProps.userData.pseudo) {
@@ -99,7 +104,9 @@ class Quiz extends Component {
 
   nextQuestion = () => {
       if (this.state.idQuestion === this.state.maxQuestions - 1) {
-          this.gameOver();
+          this.setState({
+              quizEnd: true
+          })
       } else {
           this.setState(prevState => ({
               idQuestion: prevState.idQuestion + 1
@@ -143,23 +150,17 @@ class Quiz extends Component {
 
 
 
-  gameOver = () => {
+  gameOver = percent => {
 
-    const gradePercent = this.getPercentage(this.state.maxQuestions, this.state.score);
 
-    if (gradePercent >= 50) {
+    if (percent >= 50) {
         this.setState({
             quizLevel: this.state.quizLevel +1,
-            percent:  gradePercent,
-            quizEnd: true
+            percent
         })
     } else {
-        this.setState({
-            percent: gradePercent,
-            quizEnd: true
-        })
+        this.setState({percent})
     }
-
   }
 
   loadLevelQuestions = param => {

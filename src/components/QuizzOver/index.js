@@ -20,7 +20,11 @@ const QuizOver = React.forwardRef((props, ref) => {
 
   }, [ref])
 
-  const averageGrade = maxQuestions / 2
+  const averageGrade = maxQuestions / 2;
+
+  if (score < averageGrade) {
+        setTimeout(() => loadLevelQuestions(quizLevel),3000);
+  }
 
   const decision = score >= averageGrade ? (
       <Fragment>
@@ -56,7 +60,7 @@ const QuizOver = React.forwardRef((props, ref) => {
       </div>
       <div className="percentage">
           <div className="progressPercent">Réussite: {percent} %</div>
-          <div className="progressPercent">Note: {score}/{maxQuestions} %</div>
+          <div className="progressPercent">Note: {score}/{maxQuestions}</div>
       </div>
       </Fragment>
   )
@@ -93,8 +97,9 @@ const QuizOver = React.forwardRef((props, ref) => {
   (
     <tr>
       <td colSpan="3">
+          <div className="loader"></div>
           <p style={{textAlign: 'center', color: 'red'}}>
-                Pas de réponses
+                Pas de réponses !
           </p>
       </td>
     </tr>
