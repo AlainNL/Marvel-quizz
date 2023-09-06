@@ -10,7 +10,6 @@ const ProgressBar = ({idQuestion, maxQuestions}) => {
 
     const progressPourcent = getWidth(maxQuestions, actualQuestion);
 
-    console.log(progressPourcent)
     return (
       <Fragment>
       <div className="percentage">

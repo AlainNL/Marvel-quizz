@@ -41,7 +41,7 @@ const handleChange = event => {
         </label>
 
 <Tooltip id="my-tooltip" place="top" />
-        <Tooltip
+        < Tooltip
             id="my-tooltip"
             place="top"
             effect="solid"
