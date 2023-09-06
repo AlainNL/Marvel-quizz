@@ -9,10 +9,12 @@ import Signup from '../Signeup';
 import ErrorPage from '../ErrorPage';
 import '../../App.css';
 import ForgetPassword from '../ForgetPassword';
+import { IconContext } from 'react-icons';
 
 function App() {
   return (
     <Router>
+      <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}>
       <Header />
 
       <Routes>
@@ -25,6 +27,7 @@ function App() {
       </Routes>
 
       <Footer />
+      </IconContext.Provider>
     </Router>
   );
 }

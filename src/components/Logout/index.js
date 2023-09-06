@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
 import { signOut } from "firebase/auth";
 import { auth } from '../Firebase/firebaseConfig';
 import { useNavigate } from 'react-router-dom';
@@ -35,8 +37,15 @@ const handleChange = event => {
                 type="checkbox"
                 checked={checked}
             />
-            <span className="slider round"></span>
+            <span className="slider round"  data-tooltip-id="my-tooltip" data-tooltip-content="Déconnexion" ></span>
         </label>
+
+<Tooltip id="my-tooltip" place="top" />
+        <Tooltip
+            id="my-tooltip"
+            place="top"
+            effect="solid"
+        />
     </div>
   )
 }
